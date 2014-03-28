@@ -45,7 +45,7 @@ func BenchmarkLexer(b *testing.B) {
 
 func testParse(buf []byte) (toks []Token) {
 
-	toks = make([]Token, 0)
+	toks = make([]Token, 0, 200000)
 
 	lex := NewLexer(buf)
 
