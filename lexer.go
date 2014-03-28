@@ -135,7 +135,7 @@ var opTable = [...]TokenName{
 // tokens from the stream. The lexer will return a token with the name EOF when
 // done.
 type Lexer struct {
-	buf []byte
+	buf string
 
 	// Current rune.
 	r rune
@@ -148,7 +148,7 @@ type Lexer struct {
 }
 
 // NewLexer creates a new lexer for the given input.
-func NewLexer(buf []byte) *Lexer {
+func NewLexer(buf string) *Lexer {
 	lex := Lexer{buf, -1, 0, 0}
 
 	// Prime the lexer by calling .next
@@ -203,7 +203,7 @@ func (lex *Lexer) next() {
 		if r > utf8.RuneSelf {
 			// The current rune is not actually ASCII, so we have to decode it
 			// properly.
-			r, w = utf8.DecodeRune(lex.buf[lex.nextpos:])
+			r, w = utf8.DecodeRuneInString(lex.buf[lex.nextpos:])
 		}
 
 		lex.nextpos += w
@@ -292,7 +292,7 @@ func main() {
 		log.Fatal("Error:", err)
 	}
 
-	nl := NewLexer(filebuf)
+	nl := NewLexer(string(filebuf))
 
 	toks := []Token{}
 

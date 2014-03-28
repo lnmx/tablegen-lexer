@@ -15,7 +15,9 @@ func TestLexer(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	toks := testParse(buf)
+	sbuf := string(buf)
+
+	toks := testParse(sbuf)
 
 	if len(toks) != input_tokens {
 		t.Fatal("expected", input_tokens, "tokens, got", len(toks))
@@ -30,12 +32,14 @@ func BenchmarkLexer(b *testing.B) {
 		b.Fatal(err)
 	}
 
+	sbuf := string(buf)
+
 	// reset the bench timer to ignore file read time
 	//
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		toks := testParse(buf)
+		toks := testParse(sbuf)
 
 		if len(toks) != input_tokens {
 			b.Fatal("expected", input_tokens, "tokens, got", len(toks))
@@ -43,7 +47,7 @@ func BenchmarkLexer(b *testing.B) {
 	}
 }
 
-func testParse(buf []byte) (toks []Token) {
+func testParse(buf string) (toks []Token) {
 
 	toks = make([]Token, 0, 200000)
 
